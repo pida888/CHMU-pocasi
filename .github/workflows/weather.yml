@@ -1,9 +1,6 @@
 name: Aktualizace počasí ČHMÚ
 
 on:
-  schedule:
-    # Každých 20 minut mezi 05:00 a 22:59 UTC (cca 06:00–23:59 českého času)
-    - cron: "*/20 5-22 * * *"
   workflow_dispatch:
 
 jobs:
