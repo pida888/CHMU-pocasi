@@ -1,0 +1,29 @@
+name: Aktualizace počasí ČHMÚ
+
+on:
+  schedule:
+    # Každých 20 minut mezi 05:00 a 22:59 UTC (cca 06:00–23:59 českého času)
+    - cron: "*/20 5-22 * * *"
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Stažení repozitáře
+        uses: actions/checkout@v4
+
+      - name: Nastavení Pythonu
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Stažení dat a výpočet
+        run: python update_weather.py
+
+      - name: Uložení pocasi.json do repozitáře
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add pocasi.json
+          git diff --staged --quiet || (git commit -m "Aktualizace teploty" && git push)
